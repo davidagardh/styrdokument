@@ -46,8 +46,8 @@ jobs:
               if ! diff main/$filename $filename > /dev/null; then
                   latexmk -outdir=../build -cd $filename && \
                   latexdiff --flatten \
-                      main/$filename $filename > diff_$filename && \
-                  latexmk -outdir=../build -cd diff_$filename
+                      main/$filename $filename > ${filename%.*}_diff.tex && \
+                  latexmk -outdir=../build -cd ${filename%.*}_diff.tex
               fi
           done
       - name: Compile diffs for guidelines
@@ -56,8 +56,8 @@ jobs:
               if ! diff main/$filename $filename > /dev/null; then
                   latexmk -outdir=../build -cd $filename && \
                   latexdiff --flatten \
-                      main/$filename $filename > diff_$filename && \
-                  latexmk -outdir=../build -cd diff_$filename
+                      main/$filename $filename > ${filename%.*}_diff.tex && \
+                  latexmk -outdir=../build -cd ${filename%.*}_diff.tex
               fi
           done
 
