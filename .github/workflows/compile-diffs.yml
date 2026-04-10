@@ -23,40 +23,22 @@ jobs:
         with:
           ref: main
           path: main
-      - name: Create build directory
-        run: mkdir build
-      - name: list
-        run: ls
-      - name: Compile statutes
-        run: |
-          latexmk -outdir=../build -cd stadgar/stadgar.tex
-      - name: Compile regulations
-        run: |
-          latexmk -outdir=../build -cd reglemente/reglemente.tex
 
       - name: Compile diffs for statutes
         run: |
-          latexdiff --flatten --exclude-textcmd="section,subsection,subsubsection,paragraph,subparagraph" \
-            --append-safecmd=chapter \
-            --append-safecmd=part \
-            --append-safecmd=appendix \
-            --append-safecmd=frontmatter \
-            --append-safecmd=mainmatter \
-            --append-safecmd=backmatter \
-            -- \
-            main/stadgar/stadgar.tex stadgar/stadgar.tex > stadgar/stadgar_diff.tex
+          diff main/stadgar/stadgar.tex stadgar/stadgar.tex > /dev/null || \
+          latexmk -outdir=../build -cd stadgar/stadgar.tex && \
+          latexdiff --flatten \
+            main/stadgar/stadgar.tex stadgar/stadgar.tex > stadgar/stadgar_diff.tex && \
           latexmk -outdir=../build -cd stadgar/stadgar_diff.tex
       - name: Compile diffs for regulations
         run: |
-          latexdiff --flatten --exclude-textcmd="section,subsection,subsubsection,paragraph,subparagraph" \
-            --append-safecmd=chapter \
-            --append-safecmd=part \
-            --append-safecmd=appendix \
-            --append-safecmd=frontmatter \
-            --append-safecmd=mainmatter \
-            --append-safecmd=backmatter \
-            main/reglemente/reglemente.tex reglemente/reglemente.tex > reglemente/reglemente_diff.tex
+          diff main/reglemente/reglemente.tex reglemente/reglemente.tex > /dev/null || \
+          latexmk -outdir=../build -cd reglemente/reglemente.tex && \
+          latexdiff --flatten \
+            main/reglemente/reglemente.tex reglemente/reglemente.tex > reglemente/reglemente_diff.tex && \
           latexmk -outdir=../build -cd reglemente/reglemente_diff.tex
+
       - name: List outputs
         run: ls build
       - name: Upload PDFs as artifact
