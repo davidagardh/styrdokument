@@ -1,6 +1,6 @@
 # yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
 name: Compile diffs
-run-name: "Recompile after ${{ github.actor }}'s changes"
+run-name: "Compile and compare ${{ github.actor }}'s changes"
 on:
   pull_request:
     branches:
@@ -38,8 +38,8 @@ jobs:
             --append-safecmd=frontmatter \
             --append-safecmd=mainmatter \
             --append-safecmd=backmatter \
-            stadgar/stadgar.tex stadgar/stadgar.tex > build/stadgar_diff.tex
-          latexmk -outdir=../build -cd build/stadgar_diff.tex
+            stadgar/stadgar.tex stadgar/stadgar.tex > /tmp/stadgar_diff.tex
+          latexmk -outdir=../build -cd /tmp/stadgar_diff.tex
       - name: Compile diffs for regulations
         run: |
           latexdiff --flatten --exclude-textcmd="section,subsection,subsubsection,paragraph,subparagraph" \
@@ -49,8 +49,8 @@ jobs:
             --append-safecmd=frontmatter \
             --append-safecmd=mainmatter \
             --append-safecmd=backmatter \
-            reglemente/reglemente.tex reglemente/reglemente.tex > build/reglemente_diff.tex
-          latexmk -outdir=../build -cd build/reglemente_diff.tex
+            reglemente/reglemente.tex reglemente/reglemente.tex > /tmp/reglemente_diff.tex
+          latexmk -outdir=../build -cd /tmp/reglemente_diff.tex
       - name: List outputs
         run: ls build
       - name: Upload PDFs as artifact
