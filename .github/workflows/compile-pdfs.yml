@@ -48,12 +48,12 @@ jobs:
           done
       - name: List outputs
         run: ls build
-      - name: Create release
-        if: ${{ github.ref_name == 'main' }}
-        run: |
-          git config --global --add safe.directory \
-              /__w/styrdokument/styrdokument
-          gh release delete latest -y
-          gh release create latest build/*.pdf
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      # - name: Create release
+      #   if: ${{ github.ref_name == 'main' }}
+      #   run: |
+      #     git config --global --add safe.directory \
+      #         /__w/styrdokument/styrdokument
+      #     gh release delete latest -y
+      #     gh release create latest build/*.pdf
+      #   env:
+      #     GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
