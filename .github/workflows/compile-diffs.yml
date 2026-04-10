@@ -18,6 +18,11 @@ jobs:
         run: apt update && apt install latexdiff -y
       - name: Check out document sources
         uses: actions/checkout@v4
+      - name: Checkout main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          path: main
       - name: Create build directory
         run: mkdir build
       - name: list
@@ -38,8 +43,8 @@ jobs:
             --append-safecmd=frontmatter \
             --append-safecmd=mainmatter \
             --append-safecmd=backmatter \
-            stadgar/stadgar.tex stadgar/stadgar.tex > /tmp/stadgar_diff.tex
-          latexmk -outdir=../build -cd /tmp/stadgar_diff.tex
+            main/stadgar/stadgar.tex stadgar/stadgar.tex > stadgar/stadgar_diff.tex
+          latexmk -outdir=../build -cd stadgar/stadgar_diff.tex
       - name: Compile diffs for regulations
         run: |
           latexdiff --flatten --exclude-textcmd="section,subsection,subsubsection,paragraph,subparagraph" \
@@ -49,8 +54,8 @@ jobs:
             --append-safecmd=frontmatter \
             --append-safecmd=mainmatter \
             --append-safecmd=backmatter \
-            reglemente/reglemente.tex reglemente/reglemente.tex > /tmp/reglemente_diff.tex
-          latexmk -outdir=../build -cd /tmp/reglemente_diff.tex
+            main/reglemente/reglemente.tex reglemente/reglemente.tex > reglemente/reglemente_diff.tex
+          latexmk -outdir=../build -cd reglemente/reglemente_diff.tex
       - name: List outputs
         run: ls build
       - name: Upload PDFs as artifact
