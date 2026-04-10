@@ -26,7 +26,7 @@ jobs:
 
       - name: Compile diffs for statutes
         run: |
-          if diff main/stadgar/stadgar.tex stadgar/stadgar.tex > /dev/null; then
+          if ! diff main/stadgar/stadgar.tex stadgar/stadgar.tex > /dev/null; then
               latexmk -outdir=../build -cd stadgar/stadgar.tex
               latexdiff --flatten \
                   main/stadgar/stadgar.tex stadgar/stadgar.tex > stadgar/stadgar_diff.tex
@@ -34,7 +34,7 @@ jobs:
           fi
       - name: Compile diffs for regulations
         run: |
-          if diff main/reglemente/reglemente.tex reglemente/reglemente.tex > /dev/null; then
+          if ! diff main/reglemente/reglemente.tex reglemente/reglemente.tex > /dev/null; then
               latexmk -outdir=../build -cd reglemente/reglemente.tex
               latexdiff --flatten \
                   main/reglemente/reglemente.tex reglemente/reglemente.tex > reglemente/reglemente_diff.tex
@@ -43,21 +43,21 @@ jobs:
       - name: Compile diffs for policies
         run: |
           for filename in policyer/*.tex; do
-              if diff main/policyer/$filename policyer/$filename > /dev/null; then
-                  latexmk -outdir=../build -cd policyer/$filename && \
+              if ! diff main/$filename $filename > /dev/null; then
+                  latexmk -outdir=../build -cd $filename && \
                   latexdiff --flatten \
-                      main/policyer/$filename policyer/$filename > policyer/diff_$filename && \
-                  latexmk -outdir=../build -cd policyer/diff_$filename
+                      main/$filename $filename > diff_$filename && \
+                  latexmk -outdir=../build -cd diff_$filename
               fi
           done
       - name: Compile diffs for guidelines
         run: |
-          for filename in riklinjer/*.tex; do
-              if diff main/riklinjer/$filename riklinjer/$filename > /dev/null; then
-                  latexmk -outdir=../build -cd riklinjer/$filename && \
+          for filename in riktlinjer/*.tex; do
+              if ! diff main/$filename $filename > /dev/null; then
+                  latexmk -outdir=../build -cd $filename && \
                   latexdiff --flatten \
-                      main/riklinjer/$filename riklinjer/$filename > riklinjer/diff_$filename && \
-                  latexmk -outdir=../build -cd riklinjer/diff_$filename
+                      main/$filename $filename > diff_$filename && \
+                  latexmk -outdir=../build -cd diff_$filename
               fi
           done
 
